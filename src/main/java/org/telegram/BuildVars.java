@@ -1,5 +1,8 @@
 package org.telegram;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Ruben Bermudez
  * @version 1.0
@@ -23,11 +26,16 @@ public class BuildVars {
 
     public static final String TRANSIFEXUSER = "<transifex-user>";
     public static final String TRANSIFEXPASSWORD = "<transifex-password>";
+    public static final List<Integer> ADMINS = new ArrayList<>();
 
     public static final String pathToLogs = "./";
 
     public static final String linkDB = "jdbc:mysql://localhost:3306/YOURDATABSENAME?useUnicode=true&characterEncoding=UTF-8";
-    public static final String controllerDB = "com.mysql.jdbc.Driver";
+    public static final String controllerDB = "com.mysql.cj.jdbc.Driver";
     public static final String userDB = "<your-database-user>";
     public static final String password = "<your-databas-user-password>";
+
+    static {
+        // Add elements to ADMIN array here
+    }
 }

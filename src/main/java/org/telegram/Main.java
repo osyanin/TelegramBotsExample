@@ -1,16 +1,11 @@
 package org.telegram;
 
-import org.telegram.telegrambots.TelegramApiException;
-import org.telegram.telegrambots.TelegramBotsApi;
-import org.telegram.telegrambots.logging.BotLogger;
-import org.telegram.telegrambots.logging.BotsFileHandler;
-import org.telegram.updateshandlers.ChannelHandlers;
-import org.telegram.updateshandlers.DirectionsHandlers;
-import org.telegram.updateshandlers.FilesHandlers;
-import org.telegram.updateshandlers.RaeHandlers;
-import org.telegram.updateshandlers.TransifexHandlers;
-import org.telegram.updateshandlers.WeatherHandlers;
-import org.telegram.updateshandlers.WebHookExampleHandlers;
+import org.telegram.telegrambots.ApiContextInitializer;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.logging.BotLogger;
+import org.telegram.telegrambots.meta.logging.BotsFileHandler;
+import org.telegram.updateshandlers.*;
 
 import java.io.IOException;
 import java.util.logging.ConsoleHandler;
@@ -35,6 +30,7 @@ public class Main {
         }
 
         try {
+            ApiContextInitializer.init();
             TelegramBotsApi telegramBotsApi = createTelegramBotsApi();
             try {
                 // Register long polling bots. They work regardless type of TelegramBotsApi we are creating
@@ -44,6 +40,8 @@ public class Main {
                 telegramBotsApi.registerBot(new WeatherHandlers());
                 telegramBotsApi.registerBot(new TransifexHandlers());
                 telegramBotsApi.registerBot(new FilesHandlers());
+                telegramBotsApi.registerBot(new CommandsHandler(BotConfig.COMMANDS_USER));
+            	telegramBotsApi.registerBot(new ElektrollArtFanHandler());
             } catch (TelegramApiException e) {
                 BotLogger.error(LOGTAG, e);
             }

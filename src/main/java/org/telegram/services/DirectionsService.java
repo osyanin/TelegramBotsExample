@@ -12,7 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.telegram.BuildVars;
-import org.telegram.telegrambots.logging.BotLogger;
+import org.telegram.telegrambots.meta.logging.BotLogger;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -84,7 +84,7 @@ public class DirectionsService {
             JSONObject jsonObject = new JSONObject(responseContent);
             if (jsonObject.getString("status").equals("OK")) {
                 JSONObject route = jsonObject.getJSONArray("routes").getJSONObject(0);
-                String startOfAddress = LocalisationService.getInstance().getString("directionsInit", language);
+                String startOfAddress = LocalisationService.getString("directionsInit", language);
                 String partialResponseToUser = String.format(startOfAddress,
                         route.getJSONArray("legs").getJSONObject(0).getString("start_address"),
                         route.getJSONArray("legs").getJSONObject(0).getJSONObject("distance").getString("text"),
@@ -95,11 +95,11 @@ public class DirectionsService {
                 responseToUser.addAll(getDirectionsSteps(
                         route.getJSONArray("legs").getJSONObject(0).getJSONArray("steps"), language));
             } else {
-                responseToUser.add(LocalisationService.getInstance().getString("directionsNotFound", language));
+                responseToUser.add(LocalisationService.getString("directionsNotFound", language));
             }
         } catch (Exception e) {
             BotLogger.warn(LOGTAG, e);
-            responseToUser.add(LocalisationService.getInstance().getString("errorFetchingDirections", language));
+            responseToUser.add(LocalisationService.getString("errorFetchingDirections", language));
         }
         return responseToUser;
     }
@@ -126,7 +126,7 @@ public class DirectionsService {
     }
 
     private String getDirectionForStep(JSONObject jsonObject, String language) {
-        String direction = LocalisationService.getInstance().getString("directionsStep", language);
+        String direction = LocalisationService.getString("directionsStep", language);
         String htmlIntructions = Jsoup.parse(jsonObject.getString("html_instructions")).text();
         String duration = jsonObject.getJSONObject("duration").getString("text");
         String distance = jsonObject.getJSONObject("distance").getString("text");

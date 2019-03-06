@@ -11,7 +11,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.telegram.BuildVars;
 import org.telegram.database.DatabaseManager;
-import org.telegram.telegrambots.logging.BotLogger;
+import org.telegram.telegrambots.meta.logging.BotLogger;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -96,15 +96,15 @@ public class WeatherService {
                 cityFound = jsonObject.getJSONObject("city").getString("name") + " (" +
                         jsonObject.getJSONObject("city").getString("country") + ")";
                 saveRecentWeather(userId, cityFound, jsonObject.getJSONObject("city").getInt("id"));
-                responseToUser = String.format(LocalisationService.getInstance().getString("weatherAlert", language),
+                responseToUser = String.format(LocalisationService.getString("weatherAlert", language),
                         cityFound, convertListOfForecastToString(jsonObject, language, units, false));
             } else {
                 BotLogger.warn(LOGTAG, jsonObject.toString());
-                responseToUser = LocalisationService.getInstance().getString("cityNotFound", language);
+                responseToUser = LocalisationService.getString("cityNotFound", language);
             }
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
-            responseToUser = LocalisationService.getInstance().getString("errorFetchingWeather", language);
+            responseToUser = LocalisationService.getString("errorFetchingWeather", language);
         }
         return responseToUser;
     }
@@ -137,15 +137,15 @@ public class WeatherService {
                 cityFound = jsonObject.getJSONObject("city").getString("name") + " (" +
                         jsonObject.getJSONObject("city").getString("country") + ")";
                 saveRecentWeather(userId, cityFound, jsonObject.getJSONObject("city").getInt("id"));
-                responseToUser = String.format(LocalisationService.getInstance().getString("weatherForcast", language),
+                responseToUser = String.format(LocalisationService.getString("weatherForcast", language),
                         cityFound, convertListOfForecastToString(jsonObject, language, units, true));
             } else {
                 BotLogger.warn(LOGTAG, jsonObject.toString());
-                responseToUser = LocalisationService.getInstance().getString("cityNotFound", language);
+                responseToUser = LocalisationService.getString("cityNotFound", language);
             }
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
-            responseToUser = LocalisationService.getInstance().getString("errorFetchingWeather", language);
+            responseToUser = LocalisationService.getString("errorFetchingWeather", language);
         }
         return responseToUser;
     }
@@ -156,13 +156,13 @@ public class WeatherService {
      * @return userHash to be send to use
      * @note Forecast for the following 3 days
      */
-    public String fetchWeatherForecastByLocation(Double longitude, Double latitude, Integer userId, String language, String units) {
+    public String fetchWeatherForecastByLocation(Float longitude, Float latitude, Integer userId, String language, String units) {
         String cityFound;
         String responseToUser;
         try {
             String completURL = BASEURL + FORECASTPATH + "?lat=" + URLEncoder.encode(latitude + "", "UTF-8") + "&lon="
                     + URLEncoder.encode(longitude + "", "UTF-8") +
-                    FORECASTPARAMS.replace("@language@", language).replace("@units@", units) + APIIDEND;;
+                    FORECASTPARAMS.replace("@language@", language).replace("@units@", units) + APIIDEND;
             CloseableHttpClient client = HttpClientBuilder.create().setSSLHostnameVerifier(new NoopHostnameVerifier()).build();
             HttpGet request = new HttpGet(completURL);
             CloseableHttpResponse response = client.execute(request);
@@ -176,15 +176,15 @@ public class WeatherService {
                 cityFound = jsonObject.getJSONObject("city").getString("name") + " (" +
                         jsonObject.getJSONObject("city").getString("country") + ")";
                 saveRecentWeather(userId, cityFound, jsonObject.getJSONObject("city").getInt("id"));
-                responseToUser = String.format(LocalisationService.getInstance().getString("weatherForcast", language),
+                responseToUser = String.format(LocalisationService.getString("weatherForcast", language),
                         cityFound, convertListOfForecastToString(jsonObject, language, units, true));
             } else {
                 BotLogger.warn(LOGTAG, jsonObject.toString());
-                responseToUser = LocalisationService.getInstance().getString("cityNotFound", language);
+                responseToUser = LocalisationService.getString("cityNotFound", language);
             }
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
-            responseToUser = LocalisationService.getInstance().getString("errorFetchingWeather", language);
+            responseToUser = LocalisationService.getString("errorFetchingWeather", language);
         }
         return responseToUser;
     }
@@ -217,15 +217,15 @@ public class WeatherService {
                         jsonObject.getJSONObject("sys").getString("country") + ")";
                 saveRecentWeather(userId, cityFound, jsonObject.getInt("id"));
                 emoji = getEmojiForWeather(jsonObject.getJSONArray("weather").getJSONObject(0));
-                responseToUser = String.format(LocalisationService.getInstance().getString("weatherCurrent", language),
+                responseToUser = String.format(LocalisationService.getString("weatherCurrent", language),
                         cityFound, convertCurrentWeatherToString(jsonObject, language, units, emoji));
             } else {
                 BotLogger.warn(LOGTAG, jsonObject.toString());
-                responseToUser = LocalisationService.getInstance().getString("cityNotFound", language);
+                responseToUser = LocalisationService.getString("cityNotFound", language);
             }
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
-            responseToUser = LocalisationService.getInstance().getString("errorFetchingWeather", language);
+            responseToUser = LocalisationService.getString("errorFetchingWeather", language);
         }
         return responseToUser;
     }
@@ -236,13 +236,13 @@ public class WeatherService {
      * @return userHash to be send to use
      * @note Forecast for the following 3 days
      */
-    public String fetchWeatherCurrentByLocation(Double longitude, Double latitude, Integer userId, String language, String units) {
+    public String fetchWeatherCurrentByLocation(Float longitude, Float latitude, Integer userId, String language, String units) {
         String cityFound;
         String responseToUser;
         try {
             String completURL = BASEURL + CURRENTPATH + "?lat=" + URLEncoder.encode(latitude + "", "UTF-8") + "&lon="
                     + URLEncoder.encode(longitude + "", "UTF-8") +
-                    CURRENTPARAMS.replace("@language@", language).replace("@units@", units) + APIIDEND;;
+                    CURRENTPARAMS.replace("@language@", language).replace("@units@", units) + APIIDEND;
             CloseableHttpClient client = HttpClientBuilder.create().setSSLHostnameVerifier(new NoopHostnameVerifier()).build();
             HttpGet request = new HttpGet(completURL);
             CloseableHttpResponse response = client.execute(request);
@@ -256,15 +256,15 @@ public class WeatherService {
                 cityFound = jsonObject.getString("name") + " (" +
                         jsonObject.getJSONObject("sys").getString("country") + ")";
                 saveRecentWeather(userId, cityFound, jsonObject.getInt("id"));
-                responseToUser = String.format(LocalisationService.getInstance().getString("weatherCurrent", language),
+                responseToUser = String.format(LocalisationService.getString("weatherCurrent", language),
                         cityFound, convertCurrentWeatherToString(jsonObject, language, units, null));
             } else {
                 BotLogger.warn(LOGTAG, jsonObject.toString());
-                responseToUser = LocalisationService.getInstance().getString("cityNotFound", language);
+                responseToUser = LocalisationService.getString("cityNotFound", language);
             }
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
-            responseToUser = LocalisationService.getInstance().getString("errorFetchingWeather", language);
+            responseToUser = LocalisationService.getString("errorFetchingWeather", language);
         }
         return responseToUser;
     }
@@ -276,9 +276,9 @@ public class WeatherService {
 
         String responseToUser;
         if (units.equals(METRICSYSTEM)) {
-            responseToUser = LocalisationService.getInstance().getString("currentWeatherPartMetric", language);
+            responseToUser = LocalisationService.getString("currentWeatherPartMetric", language);
         } else {
-            responseToUser = LocalisationService.getInstance().getString("currentWeatherPartImperial", language);
+            responseToUser = LocalisationService.getString("currentWeatherPartImperial", language);
         }
         responseToUser = String.format(responseToUser, emoji == null ? weatherDesc : emoji.toString(), cloudiness, temp);
 
@@ -321,15 +321,15 @@ public class WeatherService {
 
         if (units.equals(METRICSYSTEM)) {
             if (addDate) {
-                responseToUser = LocalisationService.getInstance().getString("forecastWeatherPartMetric", language);
+                responseToUser = LocalisationService.getString("forecastWeatherPartMetric", language);
             } else {
-                responseToUser = LocalisationService.getInstance().getString("alertWeatherPartMetric", language);
+                responseToUser = LocalisationService.getString("alertWeatherPartMetric", language);
             }
         } else {
             if (addDate) {
-                responseToUser = LocalisationService.getInstance().getString("forecastWeatherPartImperial", language);
+                responseToUser = LocalisationService.getString("forecastWeatherPartImperial", language);
             } else {
-                responseToUser = LocalisationService.getInstance().getString("alertWeatherPartImperial", language);
+                responseToUser = LocalisationService.getString("alertWeatherPartImperial", language);
             }
         }
         if (addDate) {

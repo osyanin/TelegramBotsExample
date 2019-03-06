@@ -1,16 +1,15 @@
 package org.telegram.updateshandlers;
 
 import org.telegram.BotConfig;
-import org.telegram.telegrambots.api.methods.BotApiMethod;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
-import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 /**
  * @author pithera
  * @version 1.0
- * @brief Simple Webhook example
- * @date 31 of May of 2016
+ * Simple Webhook example
  */
 public class WebHookExampleHandlers extends TelegramWebhookBot {
     @Override
@@ -26,16 +25,16 @@ public class WebHookExampleHandlers extends TelegramWebhookBot {
 
     @Override
     public String getBotUsername() {
-        return BotConfig.USERNAMEWEBHOOK;
+        return BotConfig.WEBHOOK_USER;
     }
 
     @Override
     public String getBotToken() {
-        return BotConfig.TOKENWEBHOOK;
+        return BotConfig.WEBHOOK_TOKEN;
     }
 
     @Override
     public String getBotPath() {
-        return BotConfig.USERNAMEWEBHOOK; //arbitrary path to deliver updates on, username is an example.
+        return BotConfig.WEBHOOK_USER; //arbitrary path to deliver updates on, username is an example.
     }
 }
